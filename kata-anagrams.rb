@@ -5,7 +5,7 @@ module Kata_anagrams
 
     if File.exist?(file_name) then
       file = File.new(file_name,'r')
-      return file.readlines.map(&:chomp)
+      return true
     else
       return StandardError.new('file do not exist')
     end
@@ -30,9 +30,10 @@ module Kata_anagrams
     answer = []
     anagrams = {}
 
-    data.each_with_object(Hash.new []) do |word, hash|
-     hash[word.chars.sort.join] += [word]
-     anagrams = hash 
+    File.readlines("file.txt").each_with_object(Hash.new []) do |word, hash|
+        hash[word.chars.sort.join] += [word]
+        anagrams = hash 
+       
     end
 
     anagrams.each do |hashData|
@@ -54,28 +55,18 @@ module Kata_anagrams
 
   end
 
-  def main()
-
-    $stdout.puts "seleccione si desa determinar el anagrama de un archivo o ingresar el arreglo de palabras"
-    $stdout.puts "1 - Ingresar la ubicacion del archivo"
-    $stdout.puts "2 - Ingresar arreglo de palabras"
-    choise = $stdin.gets.chomp
-    $stdout.puts ""
-
+  def main(choise)
 
     case choise
       when '1'
-        $stdout.puts "ingrese el nombre del archivo"
-        fileLocation = $stdin.gets.chomp
+        fileLocation = 'file.txt'
         file = fileExists(fileLocation)
         data = dataIsValid?(file)
-        $stdout.puts findAnagrams(data)
         return findAnagrams(data).length
       when '2'
         $stdout.puts "ingrese el arreglo"
         input = $stdin.gets.chomp
         data = manualInputIsValid?(input)
-        $stdout.puts findAnagrams(data)
         return findAnagrams(data).length
     end
 
@@ -85,8 +76,15 @@ end
 
 include Kata_anagrams
 
-puts "El numero de anagramas encontrados es  #{Kata_anagrams.main()}"
-puts "El programa tardo #{Benchmark.measure { "a"*1_000_000_000 }}" 
+
+$stdout.puts "seleccione si desa determinar el anagrama de un archivo o ingresar el arreglo de palabras"
+$stdout.puts "1 - Usar un archivo"
+$stdout.puts "2 - Ingresar arreglo de palabras"
+choise = $stdin.gets.chomp
+$stdout.puts ""
+
+puts "El numero de anagramas encontrados es  #{Kata_anagrams.main(choise)}"
+puts "El programa tardo #{Benchmark.measure { main(choise)*1_000_000_000 }}" 
 
 choise = $stdin.gets.chomp
 
