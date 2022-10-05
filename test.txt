@@ -1,2 +1,6 @@
 casa
 saca
+op
+sop
+oso
+soo
